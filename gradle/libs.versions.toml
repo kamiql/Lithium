@@ -1,8 +1,11 @@
 [versions]
 kotlin = "2.4.10"
+paper = "26.2.build.+"
+folia = "26.2.build.1-beta"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [libraries]
-
+paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+folia = { group = "dev.folia", name = "folia-api", version.ref = "folia" }
