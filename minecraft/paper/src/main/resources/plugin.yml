@@ -1,0 +1,11 @@
+name: $name
+version: $version
+api-version: 26.2
+description: $description
+authors:
+  - kamiql
+
+main: net.lithium.paper.PaperMain
+
+folia-supported: true
+libraries: []

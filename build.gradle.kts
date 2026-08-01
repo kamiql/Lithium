@@ -1,6 +1,13 @@
 plugins {
     alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.koin) apply false
+    alias(libs.plugins.kotlinx) apply false
+    alias(libs.plugins.shadow) apply false
 }
+
+version = "0.1.0"
+group = "net.lithium"
+description = "Lithium server core system"
 
 allprojects {
     repositories {
@@ -10,5 +17,18 @@ allprojects {
             url = uri("https://repo.papermc.io/repository/maven-public/")
         }
         maven("https://repo.kamiql.de/releases/")
+    }
+}
+
+subprojects {
+    plugins.withId("java") {
+        extensions.configure<JavaPluginExtension> {
+            withSourcesJar()
+            withJavadocJar()
+        }
+
+        tasks.withType<Jar>().configureEach {
+            destinationDirectory.set(layout.buildDirectory.dir("libs/${project.version}"))
+        }
     }
 }

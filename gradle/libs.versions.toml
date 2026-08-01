@@ -1,11 +1,21 @@
 [versions]
-kotlin = "2.4.10"
+kotlin = "2.3.21"
 paper = "26.2.build.+"
-folia = "26.2.build.1-beta"
+koin = "4.2.0"
+kotlinx = "1.11.0"
+shadow = "9.5.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+koin = { id = "io.insert-koin.compiler.plugin", version = "1.0.0" }
+kotlinx = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow"}
 
 [libraries]
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
-folia = { group = "dev.folia", name = "folia-api", version.ref = "folia" }
+folia = { group = "dev.folia", name = "folia-api", version.ref = "paper" }
+
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin" }
+
+kotlinx-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx" }
