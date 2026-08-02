@@ -5,6 +5,7 @@ koin = "4.2.0"
 kotlinx = "1.11.0"
 shadow = "9.5.0"
 kaml = "0.104.0"
+lamp = "4.0.0-rc.18"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -19,3 +20,6 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 
 kotlinx-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx" }
 kotlinx-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml"}
+
+revxral-common = { group = "io.github.revxrsal", name = "lamp.common", version.ref  = "lamp"}
+revxral-bukkit = { group = "io.github.revxrsal", name = "lamp.bukkit", version.ref  = "lamp"}

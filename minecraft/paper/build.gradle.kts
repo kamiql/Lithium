@@ -13,6 +13,9 @@ version = rootProject.version
 dependencies {
     implementation(project(":common"))
 
+    implementation(libs.revxral.common)
+    implementation(libs.revxral.bukkit)
+
     compileOnly(libs.folia)
 }
 

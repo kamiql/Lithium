@@ -4,6 +4,7 @@ import net.lithium.common.ApplicationMeta
 import net.lithium.common.LithiumApplication
 import net.lithium.common.LithiumBootstrap
 import net.lithium.common.lib.config.ConfigService
+import net.lithium.paper.modules.LampModule
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.inject
 import org.koin.core.module.Module
@@ -20,6 +21,7 @@ class PaperMain : JavaPlugin(), LithiumApplication {
     )
 
     override val modules: List<Module> = listOf(
+        LampModule,
 
     )
 
@@ -31,7 +33,7 @@ class PaperMain : JavaPlugin(), LithiumApplication {
     }
 
     override fun onEnable() {
-
+        applicationLogger.info(config.toString())
     }
 
     override fun onDisable() {
