@@ -13,13 +13,13 @@ version = rootProject.version
 dependencies {
     implementation(project(":common"))
 
-    compileOnly(libs.paper)
+    compileOnly(libs.folia)
 }
 
 tasks.named<ShadowJar>("shadowJar") {
     mergeServiceFiles()
     archiveVersion.set(project.version.toString())
-    archiveBaseName.set(project.name)
+    archiveBaseName.set(rootProject.name)
     archiveClassifier.set("")
 }
 

@@ -1,11 +1,45 @@
 package net.lithium.common
 
+import net.lithium.common.lib.config.ConfigService
+import net.lithium.common.modules.DatabaseModule
+import net.lithium.common.modules.SerializationModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 object LithiumBootstrap : KoinComponent {
+    inline fun <reified T : LithiumApplication, reified C: ApplicationConfig> bootstrap(app: T) {
+        val meta = app.meta
+
+        startKoin {
+            modules(
+                module {
+                    single {
+                        app
+                    } bind LithiumApplication::class
+
+                    single {
+                        ConfigService.load<C>("config.yml")
+                    }
+                },
+                *app.modules.toTypedArray(),
+                DatabaseModule,
+                SerializationModule
+            )
+
+            logger(KoinLogger(app.applicationLogger))
+        }
+
+        ascii()
+            .replace("%version%", meta.version)
+            .replace("%name%", meta.name)
+            .replace("%authors%", meta.authors.joinToString(", "))
+            .lines().forEach {
+                app.applicationLogger.info(it)
+            }
+    }
+
     /**
      * The ASCII banner displayed during bootstrap.
      *
@@ -35,30 +69,5 @@ object LithiumBootstrap : KoinComponent {
             
             $CYAN-------------------------------------------------------$RESET
         """.trimIndent()
-    }
-
-    inline fun <reified T : LithiumApplication> bootstrap(app: T) {
-        val meta = app.meta
-
-        startKoin {
-            modules(
-                module {
-                    single {
-                        app
-                    } bind LithiumApplication::class
-                },
-                *app.modules.toTypedArray()
-            )
-
-            logger(KoinLogger(app.logger()))
-        }
-
-        ascii()
-            .replace("%version%", meta.version)
-            .replace("%name%", meta.name)
-            .replace("%authors%", meta.authors.joinToString(", "))
-            .lines().forEach {
-                app.logger().info(it)
-            }
     }
 }
