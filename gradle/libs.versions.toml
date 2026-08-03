@@ -1,25 +1,37 @@
 [versions]
 kotlin = "2.3.21"
 paper = "26.2.build.+"
+velocity = "4.1.0-SNAPSHOT"
 koin = "4.2.0"
 kotlinx = "1.11.0"
 shadow = "9.5.0"
 kaml = "0.104.0"
 lamp = "4.0.0-rc.18"
+luckperms = "5.5"
+adventure = "5.2.0"
+coroutines = "1.11.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 koin = { id = "io.insert-koin.compiler.plugin", version = "1.0.0" }
 kotlinx = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow"}
 
 [libraries]
+luckperms = { group = "net.luckperms", name = "api", version.ref = "luckperms"}
+adventure = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+
 folia = { group = "dev.folia", name = "folia-api", version.ref = "paper" }
+velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity"}
 
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core-jvm", version.ref = "coroutines"}
 
 kotlinx-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx" }
 kotlinx-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml"}
 
 revxral-common = { group = "io.github.revxrsal", name = "lamp.common", version.ref  = "lamp"}
 revxral-bukkit = { group = "io.github.revxrsal", name = "lamp.bukkit", version.ref  = "lamp"}
+revxral-velocity = { group = "io.github.revxrsal", name = "lamp.velocity", version.ref  = "lamp"}

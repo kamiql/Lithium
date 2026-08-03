@@ -1,8 +1,8 @@
 package net.lithium.common
 
 import net.lithium.common.lib.config.ConfigService
-import net.lithium.common.modules.DatabaseModule
-import net.lithium.common.modules.SerializationModule
+import net.lithium.common.lib.i18n.I18n
+import net.lithium.common.modules.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.bind
@@ -12,25 +12,6 @@ object LithiumBootstrap : KoinComponent {
     inline fun <reified T : LithiumApplication, reified C: ApplicationConfig> bootstrap(app: T) {
         val meta = app.meta
 
-        startKoin {
-            modules(
-                module {
-                    single {
-                        app
-                    } bind LithiumApplication::class
-
-                    single {
-                        ConfigService.load<C>("config.yml")
-                    }
-                },
-                *app.modules.toTypedArray(),
-                DatabaseModule,
-                SerializationModule
-            )
-
-            logger(KoinLogger(app.applicationLogger))
-        }
-
         ascii()
             .replace("%version%", meta.version)
             .replace("%name%", meta.name)
@@ -38,6 +19,27 @@ object LithiumBootstrap : KoinComponent {
             .lines().forEach {
                 app.applicationLogger.info(it)
             }
+
+        startKoin {
+            modules(
+                module {
+                    single {
+                        app
+                    } bind LithiumApplication::class
+
+                    single(createdAtStart = true) {
+                        ConfigService.load<C>("config.yml")
+                    }
+                },
+                *app.modules.toTypedArray(),
+                SerializationModule,
+                MiniMessageModule
+            )
+
+            logger(KoinLogger(app.applicationLogger))
+        }
+
+        I18n.init()
     }
 
     /**
@@ -63,9 +65,7 @@ object LithiumBootstrap : KoinComponent {
             $BLUE  ██║     ██║   ██║   ██╔══██║██║╚██╗ ██╔╝██║╚██╔╝██║
             $BLUE  ███████╗██║   ██║   ██║  ██║██║ ╚████╔╝ ██║ ╚═╝ ██║
             $BLUE  ╚══════╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═╝     ╚═╝
-            
-            $WHITE  v%version%
-            $WHITE  %authors%
+            $WHITE  v%version% by %authors%
             
             $CYAN-------------------------------------------------------$RESET
         """.trimIndent()

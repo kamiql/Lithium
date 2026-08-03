@@ -3,6 +3,7 @@ package net.lithium.common.lib.database.sources
 import net.lithium.common.lib.database.DataSource
 
 class MemoryDataSource<K : Any, V : Any> : DataSource<K, V>() {
+
     val data = mutableMapOf<K, V>()
 
     override suspend fun load(key: K): V? {
@@ -10,7 +11,7 @@ class MemoryDataSource<K : Any, V : Any> : DataSource<K, V>() {
     }
 
     override suspend fun loadAll(): Map<K, V> {
-        return data
+        return data.toMap()
     }
 
     override suspend fun saveInternal(key: K, value: V) {

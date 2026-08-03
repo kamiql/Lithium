@@ -7,7 +7,7 @@ import revxrsal.commands.bukkit.BukkitLamp
 import revxrsal.commands.bukkit.actor.BukkitCommandActor
 
 val LampModule = module {
-    single<Lamp<BukkitCommandActor>> {
+    single {
         BukkitLamp.builder(get<PaperMain>()).accept {
 
         }.build()

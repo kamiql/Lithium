@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.koin) apply false
     alias(libs.plugins.kotlinx) apply false
     alias(libs.plugins.shadow) apply false
+    alias(libs.plugins.kapt) apply false
 }
 
 version = "0.1.0"
@@ -22,11 +23,6 @@ allprojects {
 
 subprojects {
     plugins.withId("java") {
-        extensions.configure<JavaPluginExtension> {
-            withSourcesJar()
-            withJavadocJar()
-        }
-
         tasks.withType<Jar>().configureEach {
             destinationDirectory.set(layout.buildDirectory.dir("libs/${project.version}"))
         }

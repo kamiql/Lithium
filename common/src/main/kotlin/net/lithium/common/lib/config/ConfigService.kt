@@ -16,11 +16,15 @@ object ConfigService : KoinComponent {
     inline fun <reified T: Any> load(name: String, directory: File = app.applicationDataFolder): T {
         val file = directory.resolve(name)
 
+        app.applicationLogger.info("Loading config $file")
+
         if (!file.exists()) {
             file.parentFile?.mkdirs()
 
             val instance = T::class.createInstance()
             save(instance, name, directory)
+
+            app.applicationLogger.warning("$file empty, created default config")
 
             return instance
         }

@@ -3,6 +3,7 @@ package net.lithium.common
 import kotlinx.serialization.Serializable
 
 interface ApplicationConfig {
+    val prefix: String
     val database: Database
 
     @Serializable

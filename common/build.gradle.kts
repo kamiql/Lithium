@@ -14,6 +14,11 @@ dependencies {
 
     api(libs.kotlinx.json)
     api(libs.kotlinx.kaml)
+
+    api(libs.luckperms)
+    api(libs.adventure)
+
+    api(libs.coroutines)
 }
 
 koinCompiler {

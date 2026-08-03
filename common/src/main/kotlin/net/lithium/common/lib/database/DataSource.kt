@@ -1,43 +1,23 @@
 package net.lithium.common.lib.database
 
-import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 abstract class DataSource<K : Any, V : Any> : KoinComponent {
-    protected val json: Json by inject()
 
-    protected val cache = mutableMapOf<K, V>()
-
-    suspend fun find(key: K): V? {
-        cache[key]?.let { return it }
-
-        val value = load(key) ?: return null
-        cache[key] = value
-        return value
+    open suspend fun find(key: K): V? {
+        return load(key)
     }
 
-    suspend fun findAll(): Map<K, V> {
-        if (cache.isEmpty()) {
-            cache.putAll(loadAll())
-        }
-
-        return cache
+    open suspend fun findAll(): Map<K, V> {
+        return loadAll()
     }
 
-    suspend fun save(key: K, value: V) {
-        cache[key] = value
+    open suspend fun save(key: K, value: V) {
         saveInternal(key, value)
     }
 
-    suspend fun delete(key: K) {
-        cache.remove(key)
+    open suspend fun delete(key: K) {
         deleteInternal(key)
-    }
-
-    suspend fun reload() {
-        cache.clear()
-        cache.putAll(loadAll())
     }
 
     protected abstract suspend fun load(key: K): V?
