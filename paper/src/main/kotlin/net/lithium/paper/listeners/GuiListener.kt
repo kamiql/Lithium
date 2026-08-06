@@ -11,10 +11,6 @@ import org.bukkit.event.inventory.InventoryEvent
 object GuiListener : Listener {
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
-        (event.inventory.holder as? GUI)?.let {
-
-        }
-
         event.gui {
             if (event.clickedInventory != event.view.topInventory) return@gui
             if (this.cancelClick) event.isCancelled = true
