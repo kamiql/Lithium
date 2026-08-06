@@ -44,7 +44,7 @@ class GUI private constructor(
 
     var closeCallback: ((GUIEvent<InventoryCloseEvent>) -> Unit)? = null
 
-    fun item(
+    fun setItem(
         slot: Int,
         ib: IB,
         callback: (GUIEvent<InventoryClickEvent>) -> Unit = {},
@@ -55,7 +55,7 @@ class GUI private constructor(
         )
     }
 
-    fun addPane(
+    fun setPane(
         pane: Pane,
         x: Int = 0,
         y: Int = 0,
