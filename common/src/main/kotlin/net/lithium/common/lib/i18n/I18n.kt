@@ -59,7 +59,7 @@ object I18n : KoinComponent {
 
         return translation.map { text ->
             placeholders.entries.fold(text) { result, (key, value) ->
-                result.replace(key, value.toString())
+                result.replace("%$key%", value.toString())
             }
         }
     }
