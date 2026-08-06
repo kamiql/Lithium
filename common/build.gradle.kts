@@ -16,7 +16,9 @@ dependencies {
     api(libs.kotlinx.kaml)
 
     api(libs.luckperms)
+
     api(libs.adventure)
+    api(libs.minimessage)
 
     api(libs.coroutines)
 }

@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     `java-library`
@@ -38,5 +39,15 @@ tasks.processResources {
 
     filesMatching("plugin.yml") {
         expand(props)
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
+}
+
+tasks.withType<KotlinJvmCompile> {
+    compilerOptions {
+        javaParameters = true
     }
 }

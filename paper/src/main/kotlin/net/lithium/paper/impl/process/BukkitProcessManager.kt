@@ -1,7 +1,7 @@
 package net.lithium.paper.impl.process
 
-import net.lithium.common.lib.process.ProcessManager
 import net.lithium.common.lib.process.Process
+import net.lithium.common.lib.process.ProcessManager
 import net.lithium.paper.impl.toBukkitTicks
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin

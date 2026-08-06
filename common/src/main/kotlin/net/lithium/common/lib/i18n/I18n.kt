@@ -4,7 +4,7 @@ import net.lithium.common.LithiumApplication
 import net.lithium.common.lib.config.ConfigService
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import java.util.Locale
+import java.util.*
 
 object I18n : KoinComponent {
     val app: LithiumApplication = get()

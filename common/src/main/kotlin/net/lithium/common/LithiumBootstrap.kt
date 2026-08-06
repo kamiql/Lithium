@@ -2,7 +2,8 @@ package net.lithium.common
 
 import net.lithium.common.lib.config.ConfigService
 import net.lithium.common.lib.i18n.I18n
-import net.lithium.common.modules.*
+import net.lithium.common.modules.MiniMessageModule
+import net.lithium.common.modules.SerializationModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.bind

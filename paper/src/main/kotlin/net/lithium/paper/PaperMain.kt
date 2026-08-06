@@ -5,7 +5,9 @@ import net.lithium.common.LithiumApplication
 import net.lithium.common.LithiumBootstrap
 import net.lithium.common.lib.process.ProcessManager
 import net.lithium.paper.impl.process.BukkitProcessManager
+import net.lithium.paper.listeners.GuiListener
 import net.lithium.paper.modules.LampModule
+import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.get
 import org.koin.core.module.Module
@@ -42,9 +44,13 @@ class PaperMain : JavaPlugin(), LithiumApplication {
         lamp.register(
 
         )
+
+        server.pluginManager.registerEvents(GuiListener, this)
     }
 
     override fun onDisable() {
 
     }
 }
+
+fun test(b: (Player) -> Unit) {}

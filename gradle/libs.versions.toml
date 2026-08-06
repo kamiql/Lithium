@@ -21,6 +21,7 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow"}
 [libraries]
 luckperms = { group = "net.luckperms", name = "api", version.ref = "luckperms"}
 adventure = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
+minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 
 folia = { group = "dev.folia", name = "folia-api", version.ref = "paper" }
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity"}

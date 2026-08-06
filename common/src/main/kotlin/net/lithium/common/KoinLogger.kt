@@ -1,10 +1,10 @@
 package net.lithium.common
 
-import org.koin.core.logger.Level as KoinLevel
-import org.koin.core.logger.Logger as KoinLogger
 import org.koin.core.logger.MESSAGE
 import java.util.logging.Level
 import java.util.logging.Logger
+import org.koin.core.logger.Level as KoinLevel
+import org.koin.core.logger.Logger as KoinLogger
 
 class KoinLogger(
     private val logger: Logger,
