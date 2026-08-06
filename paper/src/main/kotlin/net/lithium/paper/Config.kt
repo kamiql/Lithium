@@ -6,5 +6,10 @@ import net.lithium.common.ApplicationConfig
 @Serializable
 data class Config(
     override val prefix: String = "<blue>Lithium",
-    override val database: ApplicationConfig.Database = ApplicationConfig.Database(),
-) : ApplicationConfig
+) : ApplicationConfig {
+
+    @Serializable
+    data class HeadDb(
+        // TODO
+    )
+}

@@ -14,13 +14,14 @@ class PaginationPane<T>(
     private val values: List<T>,
     private val mapper: (T) -> IB,
     private val onClick: (T, GUI.GUIEvent<InventoryClickEvent>) -> Unit = { _, _ -> },
-) : GridPane(
-    height = height,
-    width = width,
-    targetSlots = paginationSlots(
+    paginationSlots: List<Int> = defaultPaginationSlots(
         height = height,
         width = width,
     ),
+) : GridPane(
+    height = height,
+    width = width,
+    targetSlots = paginationSlots,
 ) {
     private var currentPage = 0
 
@@ -56,6 +57,20 @@ class PaginationPane<T>(
 
         require(width % 2 == 1) {
             "PaginationPane width must be odd"
+        }
+
+        require(paginationSlots.distinct().size == paginationSlots.size) {
+            "Pagination slots must be unique"
+        }
+
+        require(
+            paginationSlots.all { it in 0 until height * width },
+        ) {
+            "Pagination slots must be within the pane bounds"
+        }
+
+        require(backSlot !in paginationSlots && nextSlot !in paginationSlots) {
+            "Pagination slots must not contain navigation slots"
         }
 
         renderPage()
@@ -109,7 +124,7 @@ class PaginationPane<T>(
     }
 
     companion object {
-        private fun paginationSlots(
+        internal fun defaultPaginationSlots(
             height: Int,
             width: Int,
         ): List<Int> {
@@ -129,6 +144,10 @@ fun <T> paginationPane(
     width: Int,
     items: List<T>,
     mapper: (T) -> IB,
+    paginationSlots: List<Int> = PaginationPane.defaultPaginationSlots(
+        height,
+        width
+    ),
     onClick: (
         item: T,
         event: GUI.GUIEvent<InventoryClickEvent>,
@@ -141,5 +160,6 @@ fun <T> paginationPane(
         values = items,
         mapper = mapper,
         onClick = onClick,
+        paginationSlots = paginationSlots,
     ).apply(configure)
 }

@@ -8,7 +8,9 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 
 @LithiumDsl
 class IB private constructor(private val item: ItemStack) {
@@ -67,6 +69,23 @@ class IB private constructor(private val item: ItemStack) {
     fun enchant(key: NamespacedKey, level: Int): IB {
         val enchant = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[key] ?: error("enchantment $key not found in registry")
         return enchant(enchant, level)
+    }
+
+    fun glint(enabled: Boolean = true): IB {
+        item.editMeta { meta ->
+            meta.setEnchantmentGlintOverride(enabled)
+        }
+        return this
+    }
+
+    fun flags(flags: List<ItemFlag>): IB {
+        item.itemFlags.addAll(flags)
+        return this
+    }
+
+    fun meta(configure: ItemMeta.() -> Unit): IB {
+        item.editMeta(configure)
+        return this
     }
 
     operator fun invoke(): ItemStack {

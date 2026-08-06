@@ -12,10 +12,10 @@ plugins {
 version = rootProject.version
 
 dependencies {
-    implementation(project(":common"))
+    compileOnly(project(":common"))
 
-    implementation(libs.revxral.common)
-    implementation(libs.revxral.bukkit)
+    compileOnly(libs.revxral.common)
+    compileOnly(libs.revxral.bukkit)
 
     compileOnly(libs.folia)
 }

@@ -1,0 +1,6 @@
+# Lithium
+
+## Naming
+### Permissions
+
+## Documentation

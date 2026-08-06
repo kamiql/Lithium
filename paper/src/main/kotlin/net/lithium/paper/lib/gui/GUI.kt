@@ -7,6 +7,7 @@ import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.koin.core.component.KoinComponent
@@ -38,7 +39,10 @@ class GUI private constructor(
     private val directItems = linkedMapOf<Int, Item>()
     private val panes = mutableListOf<PanePlacement>()
 
-    var cancel = true
+    var cancelClick = true
+    var cancelClose = false
+
+    var closeCallback: ((GUIEvent<InventoryCloseEvent>) -> Unit)? = null
 
     fun item(
         slot: Int,
@@ -61,6 +65,10 @@ class GUI private constructor(
             x = x,
             y = y,
         )
+    }
+
+    fun onClose(callback: (GUIEvent<InventoryCloseEvent>) -> Unit) {
+        closeCallback = callback
     }
 
     fun render() {
