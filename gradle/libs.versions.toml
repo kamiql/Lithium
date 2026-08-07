@@ -36,3 +36,5 @@ kotlinx-kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "k
 revxral-common = { group = "io.github.revxrsal", name = "lamp.common", version.ref  = "lamp"}
 revxral-bukkit = { group = "io.github.revxrsal", name = "lamp.bukkit", version.ref  = "lamp"}
 revxral-velocity = { group = "io.github.revxrsal", name = "lamp.velocity", version.ref  = "lamp"}
+
+minecraft-heads-api = { group = "dev.kamiql", name = "MinecraftHeadsApi", version = "1.0.0"}

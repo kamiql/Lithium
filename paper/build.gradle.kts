@@ -17,6 +17,8 @@ dependencies {
     implementation(libs.revxral.common)
     implementation(libs.revxral.bukkit)
 
+    implementation(libs.minecraft.heads.api)
+
     compileOnly(libs.folia)
 }
 
