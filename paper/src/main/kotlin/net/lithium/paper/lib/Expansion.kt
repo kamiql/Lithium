@@ -1,4 +1,4 @@
-package net.lithium.paper.impl
+package net.lithium.paper.lib
 
 import kotlin.time.Duration
 

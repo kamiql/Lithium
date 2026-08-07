@@ -37,4 +37,4 @@ revxral-common = { group = "io.github.revxrsal", name = "lamp.common", version.r
 revxral-bukkit = { group = "io.github.revxrsal", name = "lamp.bukkit", version.ref  = "lamp"}
 revxral-velocity = { group = "io.github.revxrsal", name = "lamp.velocity", version.ref  = "lamp"}
 
-minecraft-heads-api = { group = "dev.kamiql", name = "MinecraftHeadsApi", version = "1.0.0"}
+minecraft-heads-api = { group = "dev.kamiql", name = "MinecraftHeadsApi", version = "2.0.0"}

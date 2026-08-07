@@ -1,8 +1,8 @@
-package net.lithium.paper.impl.process
+package net.lithium.paper.lib.process
 
 import net.lithium.common.lib.process.Process
 import net.lithium.common.lib.process.ProcessManager
-import net.lithium.paper.impl.toBukkitTicks
+import net.lithium.paper.lib.toBukkitTicks
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler

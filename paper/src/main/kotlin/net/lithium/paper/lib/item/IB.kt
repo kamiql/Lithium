@@ -3,6 +3,8 @@ package net.lithium.paper.lib.item
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
 import net.lithium.common.lib.text.TextModifier
+import net.lithium.paper.heads.HeadsService
+import net.lithium.paper.heads.toItem
 import net.lithium.paper.lib.LithiumDsl
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -27,9 +29,13 @@ class IB private constructor(private val item: ItemStack) {
             return IB.material(Registry.MATERIAL.get(key)!!)
         }
 
-        fun head(id: String): IB {
-            // TODO
-            return IB(ItemStack(Material.PLAYER_HEAD))
+        fun head(id: String?): IB {
+            return head(id?.toInt())
+        }
+
+        fun head(id: Int?): IB {
+            val head = HeadsService.allHeads.filter { it.id != null }.associateBy { it.id }[id]
+            return IB(head?.toItem() ?: ItemStack(Material.PLAYER_HEAD))
         }
     }
 
@@ -105,6 +111,10 @@ fun ib(key: NamespacedKey, configure: IB.() -> Unit): IB {
     return IB.item(key).apply(configure)
 }
 
-fun ib(head: String, configure: IB.() -> Unit): IB {
+fun ib(head: String?, configure: IB.() -> Unit): IB {
+    return IB.head(head).apply(configure)
+}
+
+fun ib(head: Int?, configure: IB.() -> Unit): IB {
     return IB.head(head).apply(configure)
 }

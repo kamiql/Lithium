@@ -2,6 +2,8 @@ package net.lithium.paper.lib.gui
 
 import net.lithium.paper.lib.LithiumDsl
 import net.lithium.paper.lib.item.IB
+import net.lithium.paper.lib.item.ib
+import org.bukkit.Material
 
 typealias ClickCallback =
             (GUI.GUIEvent<org.bukkit.event.inventory.InventoryClickEvent>) -> Unit
@@ -39,6 +41,14 @@ abstract class Pane(
         get() = targetSlots.size
 
     private val paneItems = linkedMapOf<Int, GUI.Item>()
+
+    fun filler(slot: Int) {
+        itemAtLocalSlot(slot, ib(Material.GRAY_STAINED_GLASS_PANE) {
+            meta {
+                isHideTooltip = true
+            }
+        })
+    }
 
     fun item(
         index: Int,

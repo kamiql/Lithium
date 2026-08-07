@@ -79,6 +79,10 @@ class PaginationPane<T>(
     private fun renderPage() {
         clearItems()
 
+        (((height - 1) * width)..<(height * width)).forEach {
+            filler(it)
+        }
+
         val fromIndex = currentPage * pageSize
         val pageItems = values
             .drop(fromIndex)

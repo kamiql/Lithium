@@ -1,4 +1,4 @@
-package net.lithium.paper.impl.process
+package net.lithium.paper.lib.process
 
 import net.lithium.common.lib.process.Process
 import org.bukkit.scheduler.BukkitTask

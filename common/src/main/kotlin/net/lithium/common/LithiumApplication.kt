@@ -1,9 +1,5 @@
 package net.lithium.common
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import net.lithium.common.lib.process.ProcessManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.module.Module
@@ -16,14 +12,4 @@ interface LithiumApplication : KoinComponent {
     val applicationLogger: Logger
     val processManager: ProcessManager
     val applicationDataFolder: File
-
-    val applicationScope: CoroutineScope
-
-    fun launchCoroutine(
-        block: suspend CoroutineScope.() -> Unit
-    ): Job = applicationScope.launch(block = block)
-
-    fun shutdownCoroutines() {
-        applicationScope.cancel()
-    }
 }

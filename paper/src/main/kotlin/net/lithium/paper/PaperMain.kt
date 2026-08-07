@@ -1,18 +1,19 @@
 package net.lithium.paper
 
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import dev.kamiql.HeadsApi
 import net.lithium.common.ApplicationMeta
 import net.lithium.common.LithiumApplication
 import net.lithium.common.LithiumBootstrap
 import net.lithium.common.lib.process.ProcessManager
-import net.lithium.paper.impl.process.BukkitProcessManager
+import net.lithium.paper.heads.HeadsModule
+import net.lithium.paper.heads.HeadsService
+import net.lithium.paper.heads.commands.HeadsCommands
+import net.lithium.paper.lib.process.BukkitProcessManager
 import net.lithium.paper.listeners.GuiListener
 import net.lithium.paper.modules.LampModule
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.component.get
+import org.koin.core.component.inject
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import revxrsal.commands.Lamp
@@ -32,29 +33,36 @@ class PaperMain : JavaPlugin(), LithiumApplication {
             single<JavaPlugin> { this@PaperMain }
         },
         LampModule,
+        HeadsModule
     )
 
     override val applicationLogger: Logger = logger
     override val processManager: ProcessManager = BukkitProcessManager(this)
     override val applicationDataFolder: File = dataFolder
-    override val applicationScope: CoroutineScope = CoroutineScope(
-        SupervisorJob() + Dispatchers.Default + CoroutineName(meta.name)
-    )
 
     override fun onLoad() {
         LithiumBootstrap.bootstrap<PaperMain, Config>(this)
     }
 
     override fun onEnable() {
+        val config: Config = get()
+
         val lamp: Lamp<BukkitCommandActor> = get()
         lamp.register(
-
+            HeadsCommands
         )
+
+        HeadsApi.init(
+            config.heads.uuid,
+            config.heads.token,
+        )
+
+        HeadsService.start()
 
         server.pluginManager.registerEvents(GuiListener, this)
     }
 
     override fun onDisable() {
-        shutdownCoroutines()
+        HeadsService.close()
     }
 }

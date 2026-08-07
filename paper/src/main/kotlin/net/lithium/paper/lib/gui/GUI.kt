@@ -1,8 +1,11 @@
 package net.lithium.paper.lib.gui
 
+import net.lithium.common.lib.text.c
 import net.lithium.paper.lib.LithiumDsl
 import net.lithium.paper.lib.item.IB
+import net.lithium.paper.lib.item.ib
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -14,20 +17,23 @@ import org.koin.core.component.KoinComponent
 
 @LithiumDsl
 class GUI private constructor(
+    val title: String,
     val type: GuiType,
     private val size: Int?,
 ) : InventoryHolder, KoinComponent {
 
     private val inv: Inventory = size?.let { size ->
-        Bukkit.createInventory(this, size)
+        Bukkit.createInventory(this, size, title.c())
     } ?: Bukkit.createInventory(this, type.type)
 
-    constructor(type: GuiType) : this(
+    constructor(title: String, type: GuiType) : this(
+        title = title,
         type = type,
         size = null,
     )
 
-    constructor(size: Int) : this(
+    constructor(title: String, size: Int) : this(
+        title = title,
         type = GuiType.CHEST,
         size = size,
     )
@@ -43,6 +49,20 @@ class GUI private constructor(
     var cancelClose = false
 
     var closeCallback: ((GUIEvent<InventoryCloseEvent>) -> Unit)? = null
+
+    fun filler(slot: Int) {
+        setItem(slot, ib(Material.GRAY_STAINED_GLASS_PANE) {
+            meta {
+                isHideTooltip = true
+            }
+        })
+    }
+
+    fun back(slot: Int, callback: (GUIEvent<InventoryClickEvent>) -> Unit) {
+        setItem(slot, ib(Material.BARRIER) {
+            displayName("<red><b>Back")
+        }) { event -> callback(event) }
+    }
 
     fun setItem(
         slot: Int,
@@ -74,8 +94,6 @@ class GUI private constructor(
     fun render() {
         inv.clear()
         items.clear()
-
-        items.putAll(directItems)
 
         val guiWidth = type.width
         val guiHeight = inv.size / guiWidth
@@ -112,6 +130,8 @@ class GUI private constructor(
             }
         }
 
+        items.putAll(directItems)
+
         items.forEach { (slot, item) ->
             inv.setItem(slot, item.ib())
         }
@@ -141,15 +161,17 @@ class GUI private constructor(
 }
 
 fun gui(
+    title: String,
     type: GuiType = GuiType.CHEST,
     configure: GUI.() -> Unit,
 ): GUI {
-    return GUI(type).apply(configure)
+    return GUI(title, type).apply(configure)
 }
 
 fun gui(
+    title: String,
     size: Int,
     configure: GUI.() -> Unit,
 ): GUI {
-    return GUI(size).apply(configure)
+    return GUI(title, size).apply(configure)
 }
