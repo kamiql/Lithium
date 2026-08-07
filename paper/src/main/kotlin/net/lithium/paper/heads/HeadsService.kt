@@ -138,7 +138,6 @@ object HeadsService : AutoCloseable, KoinComponent {
 
         val collections = HeadsApi
             .build<CollectionsBuilder>()
-            .demo()
             .build()
             .awaitBlocking()
             .data
@@ -146,7 +145,6 @@ object HeadsService : AutoCloseable, KoinComponent {
         val requests = categories.associate { category ->
             category.id to HeadsApi
                 .build<CustomHeadsBuilder>()
-                .demo()
                 .categoryId(category.id)
                 .includeId()
                 .includePublishedAt()
