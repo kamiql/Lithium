@@ -12,15 +12,15 @@ class HeadsRepository(
         return 1
     }
 
-    suspend fun findCurrent(): HeadsData? {
+    fun findCurrent(): HeadsData? {
         return find(CACHE_KEY)
     }
 
-    suspend fun saveCurrent(data: HeadsData) {
+    fun saveCurrent(data: HeadsData) {
         save(CACHE_KEY, data)
     }
 
-    suspend fun deleteCurrent() {
+    fun deleteCurrent() {
         delete(CACHE_KEY)
     }
 

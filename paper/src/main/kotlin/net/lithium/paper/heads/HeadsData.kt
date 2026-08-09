@@ -12,15 +12,9 @@ data class HeadsData(
     val headsByCategory: Map<Int, List<Head>>,
     val loadedAt: Long
 ) {
-    val heads: Map<Category, List<Head>>
-        get() = categories.associateWith { category ->
-            headsByCategory[category.id].orEmpty()
+    val allHeads: List<Head> get() = headsByCategory.values
+        .flatten()
+        .distinctBy { head ->
+            head.id ?: "${head.categoryId}:${head.name}"
         }
-
-    val allHeads: List<Head>
-        get() = headsByCategory.values
-            .flatten()
-            .distinctBy { head ->
-                head.id ?: "${head.categoryId}:${head.name}"
-            }
 }

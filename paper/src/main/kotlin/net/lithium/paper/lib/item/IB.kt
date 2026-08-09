@@ -10,6 +10,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -26,7 +27,7 @@ class IB private constructor(private val item: ItemStack) {
         }
 
         fun item(key: NamespacedKey): IB {
-            return IB.material(Registry.MATERIAL.get(key)!!)
+            return material(Registry.MATERIAL.get(key)!!)
         }
 
         fun head(id: String?): IB {
@@ -44,6 +45,27 @@ class IB private constructor(private val item: ItemStack) {
             meta.displayName(modifier.apply(text))
         }
         return this
+    }
+
+    fun addLore(lore: List<Pair<TextModifier, String>>): IB {
+        item.editMeta { meta ->
+            meta.lore(
+                (meta.lore() ?: emptyList()) + lore.map { it.first.apply(it.second) }
+            )
+        }
+        return this
+    }
+
+    fun addLore(vararg lore: Pair<TextModifier, String>): IB {
+        return setLore(lore.toList())
+    }
+
+    fun addLore(lore: List<String>, modifier: TextModifier = TextModifier.C): IB {
+        return setLore(lore.associateWith { modifier }.map { (key, value) -> value to key })
+    }
+
+    fun addLore(vararg lore: String, modifier: TextModifier = TextModifier.C): IB {
+        return setLore(lore.toList(), modifier)
     }
 
     fun setLore(lore: List<Pair<TextModifier, String>>): IB {
@@ -65,6 +87,14 @@ class IB private constructor(private val item: ItemStack) {
         return setLore(lore.toList(), modifier)
     }
 
+    fun addInstructions(instructions: List<Pair<ClickType, String>>): IB {
+        return addLore(listOf("") + instructions.map { (key, value) -> "<dark_gray>[${key.name}] <gray>$value</gray></dark_gray>" })
+    }
+
+    fun addInstructions(vararg instructions: Pair<ClickType, String>): IB {
+        return addInstructions(instructions.toList())
+    }
+
     fun enchant(enchant: Enchantment, level: Int): IB {
         item.editMeta { meta ->
             meta.addEnchant(enchant, level, true)
@@ -73,7 +103,8 @@ class IB private constructor(private val item: ItemStack) {
     }
 
     fun enchant(key: NamespacedKey, level: Int): IB {
-        val enchant = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[key] ?: error("enchantment $key not found in registry")
+        val enchant = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[key]
+            ?: error("enchantment $key not found in registry")
         return enchant(enchant, level)
     }
 

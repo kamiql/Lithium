@@ -37,7 +37,7 @@ val cleanCharacters = mapOf(
 fun String.component(): Component = Component.text(this)
 
 fun String.c(): Component {
-    return mm.deserialize(this)
+    return mm.deserialize("<!i><white>$this")
 }
 
 fun String.cc(): String = """(<[^>]+>)|([^<]+)""".toRegex().replace(this) { match ->

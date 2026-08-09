@@ -1,7 +1,6 @@
 package net.lithium.common
 
 import net.lithium.common.lib.config.ConfigService
-import net.lithium.common.lib.i18n.I18n
 import net.lithium.common.modules.MiniMessageModule
 import net.lithium.common.modules.SerializationModule
 import org.koin.core.component.KoinComponent
@@ -39,8 +38,6 @@ object LithiumBootstrap : KoinComponent {
 
             logger(KoinLogger(app.applicationLogger))
         }
-
-        I18n.init()
     }
 
     /**
