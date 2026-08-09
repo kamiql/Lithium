@@ -1,5 +1,16 @@
 package net.lithium.paper.lib.gui.panes
 
+import io.papermc.paper.dialog.Dialog
+import io.papermc.paper.dialog.DialogResponseView
+import io.papermc.paper.registry.data.dialog.ActionButton
+import io.papermc.paper.registry.data.dialog.DialogBase
+import io.papermc.paper.registry.data.dialog.action.DialogAction
+import io.papermc.paper.registry.data.dialog.action.DialogActionCallback
+import io.papermc.paper.registry.data.dialog.input.DialogInput
+import io.papermc.paper.registry.data.dialog.type.DialogType
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.event.ClickCallback
+import net.lithium.common.lib.text.c
 import net.lithium.paper.lib.LithiumDsl
 import net.lithium.paper.lib.gui.GUI
 import net.lithium.paper.lib.item.IB
@@ -13,6 +24,7 @@ class PaginationPane<T>(
     width: Int,
     private val values: List<T>,
     private val mapper: (T) -> IB,
+    private val search: (String, List<T>) -> List<T> = { _, data -> data },
     private val onClick: (T, GUI.GUIEvent<InventoryClickEvent>) -> Unit = { _, _ -> },
     paginationSlots: List<Int> = defaultPaginationSlots(
         height = height,
@@ -23,6 +35,8 @@ class PaginationPane<T>(
     width = width,
     targetSlots = paginationSlots,
 ) {
+    private var query: String = ""
+
     private var currentPage = 0
 
     private val pageSize: Int
@@ -45,6 +59,9 @@ class PaginationPane<T>(
 
     private val nextSlot: Int
         get() = navigationRow * width + centerX + 2
+
+    private val searchSlot: Int
+        get() = navigationRow * width + centerX
 
     init {
         require(height >= 2) {
@@ -84,7 +101,7 @@ class PaginationPane<T>(
         }
 
         val fromIndex = currentPage * pageSize
-        val pageItems = values
+        val pageItems = search(query, values)
             .drop(fromIndex)
             .take(pageSize)
 
@@ -98,33 +115,89 @@ class PaginationPane<T>(
             )
         }
 
-        itemAtLocalSlot(
-            localSlot = backSlot,
-            ib = ib(Material.ARROW) {
-                displayName("<red>Back")
-            },
-            callback = { event ->
-                if (currentPage > 0) {
-                    currentPage--
-                    renderPage()
-                    event.gui.render()
-                }
-            },
-        )
+        if (currentPage > 0) {
+            itemAtLocalSlot(
+                localSlot = backSlot,
+                ib = ib(Material.ARROW) {
+                    displayName("<red>Back")
+                },
+                callback = { event ->
+                    if (currentPage > 0) {
+                        currentPage--
+                        renderPage()
+                        event.gui.render()
+                    }
+                },
+            )
+        }
 
         itemAtLocalSlot(
-            localSlot = nextSlot,
-            ib = ib(Material.ARROW) {
-                displayName("<green>Next")
+            localSlot = searchSlot,
+            ib = ib(Material.OAK_SIGN) {
+
             },
             callback = { event ->
-                if (currentPage < pageCount - 1) {
-                    currentPage++
-                    renderPage()
-                    event.gui.render()
-                }
-            },
+                event.player.showDialog(
+                    Dialog.create { builder ->
+                        builder
+                            .empty()
+                            .base(
+                                DialogBase.builder("Search".c())
+                                    .inputs(
+                                        listOf(
+                                            DialogInput.text(
+                                                "input",
+                                                "Search query".c()
+                                            ).build()
+                                        )
+                                    )
+                                    .build()
+                            )
+                            .type(
+                                DialogType.multiAction(
+                                    listOf(
+                                        ActionButton.builder("Query".c())
+                                            .action(
+                                                DialogAction.customClick(
+                                                    object : DialogActionCallback {
+                                                        override fun accept(
+                                                            response: DialogResponseView,
+                                                            audience: Audience
+                                                        ) {
+                                                            query = response.getText("input").orEmpty()
+
+                                                            println("Query: $query")
+
+                                                            this@PaginationPane.renderPage()
+                                                        }
+                                                    },
+                                                    ClickCallback.Options.builder().build()
+                                                )
+                                            )
+                                            .build()
+                                    )
+                                ).build()
+                            )
+                    }
+                )
+            }
         )
+
+        if (currentPage < pageCount - 1) {
+            itemAtLocalSlot(
+                localSlot = nextSlot,
+                ib = ib(Material.ARROW) {
+                    displayName("<green>Next")
+                },
+                callback = { event ->
+                    if (currentPage < pageCount - 1) {
+                        currentPage++
+                        renderPage()
+                        event.gui.render()
+                    }
+                },
+            )
+        }
     }
 
     companion object {
@@ -148,14 +221,15 @@ fun <T> paginationPane(
     width: Int,
     items: List<T>,
     mapper: (T) -> IB,
-    paginationSlots: List<Int> = PaginationPane.defaultPaginationSlots(
-        height,
-        width
-    ),
+    search: (String, List<T>) -> List<T> = { _, data -> data },
     onClick: (
         item: T,
         event: GUI.GUIEvent<InventoryClickEvent>,
     ) -> Unit = { _, _ -> },
+    paginationSlots: List<Int> = PaginationPane.defaultPaginationSlots(
+        height,
+        width
+    ),
     configure: PaginationPane<T>.() -> Unit = {},
 ): PaginationPane<T> {
     return PaginationPane(
@@ -163,6 +237,7 @@ fun <T> paginationPane(
         width = width,
         values = items,
         mapper = mapper,
+        search = search,
         onClick = onClick,
         paginationSlots = paginationSlots,
     ).apply(configure)
