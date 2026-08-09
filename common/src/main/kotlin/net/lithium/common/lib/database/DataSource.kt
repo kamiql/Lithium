@@ -4,27 +4,33 @@ import org.koin.core.component.KoinComponent
 
 abstract class DataSource<K : Any, V : Any> : KoinComponent {
 
-    open suspend fun find(key: K): V? {
+    open fun find(key: K): V? {
         return load(key)
     }
 
-    open suspend fun findAll(): Map<K, V> {
+    open fun findAll(): Map<K, V> {
         return loadAll()
     }
 
-    open suspend fun save(key: K, value: V) {
+    open fun save(key: K, value: V) {
         saveInternal(key, value)
     }
 
-    open suspend fun delete(key: K) {
+    open fun delete(key: K) {
         deleteInternal(key)
     }
 
-    protected abstract suspend fun load(key: K): V?
+    open fun findPaginated(limit: Int, page: Int = 0): Map<K, V> =
+        findAll().entries
+            .drop((page -1) * limit)
+            .take(limit)
+            .associate { it.key to it.value }
 
-    protected abstract suspend fun loadAll(): Map<K, V>
+    protected abstract fun load(key: K): V?
 
-    protected abstract suspend fun saveInternal(key: K, value: V)
+    protected abstract fun loadAll(): Map<K, V>
 
-    protected abstract suspend fun deleteInternal(key: K)
+    protected abstract fun saveInternal(key: K, value: V)
+
+    protected abstract fun deleteInternal(key: K)
 }

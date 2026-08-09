@@ -39,7 +39,7 @@ class SQLiteDataSource<K : Any, V : Any>(
         }
     }
 
-    override suspend fun load(key: K): V? = withContext(Dispatchers.IO) {
+    override fun load(key: K): V? {
         val serializedKey = json.encodeToString(keySerializer, key)
 
         connection.prepareStatement(
@@ -50,7 +50,7 @@ class SQLiteDataSource<K : Any, V : Any>(
         ).use { statement ->
             statement.setString(1, serializedKey)
 
-            statement.executeQuery().use { resultSet ->
+            return statement.executeQuery().use { resultSet ->
                 if (!resultSet.next()) {
                     null
                 } else {
@@ -61,7 +61,7 @@ class SQLiteDataSource<K : Any, V : Any>(
         }
     }
 
-    override suspend fun loadAll(): Map<K, V> = withContext(Dispatchers.IO) {
+    override fun loadAll(): Map<K, V> {
         val result = mutableMapOf<K, V>()
 
         connection.prepareStatement(
@@ -82,10 +82,10 @@ class SQLiteDataSource<K : Any, V : Any>(
             }
         }
 
-        result
+        return result
     }
 
-    override suspend fun saveInternal(key: K, value: V): Unit = withContext(Dispatchers.IO) {
+    override fun saveInternal(key: K, value: V) {
         val serializedKey = json.encodeToString(keySerializer, key)
         val serializedValue = json.encodeToString(valueSerializer, value)
 
@@ -102,7 +102,7 @@ class SQLiteDataSource<K : Any, V : Any>(
         }
     }
 
-    override suspend fun deleteInternal(key: K): Unit = withContext(Dispatchers.IO) {
+    override fun deleteInternal(key: K) {
         val serializedKey = json.encodeToString(keySerializer, key)
 
         connection.prepareStatement(

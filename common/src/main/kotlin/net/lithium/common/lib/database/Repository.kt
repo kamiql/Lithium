@@ -5,18 +5,21 @@ abstract class Repository<K : Any, V : Any>(
 ) {
     abstract fun version(): Int
 
-    open suspend fun find(key: K): V? =
+    open fun find(key: K): V? =
         source.find(key)
 
-    open suspend fun findAll(): Map<K, V> =
+    open fun findAll(): Map<K, V> =
         source.findAll()
 
-    open suspend fun save(key: K, value: V) =
+    open fun save(key: K, value: V) =
         source.save(key, value)
 
-    open suspend fun delete(key: K) =
+    open fun delete(key: K) =
         source.delete(key)
 
-    open suspend fun exists(key: K): Boolean =
+    open fun exists(key: K): Boolean =
         source.find(key) != null
+
+    fun findPaginated(limit: Int, page: Int = 0) =
+        source.findPaginated(limit, page)
 }

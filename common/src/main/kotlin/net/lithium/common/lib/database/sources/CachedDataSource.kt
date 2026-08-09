@@ -8,7 +8,7 @@ abstract class CachedDataSource<K : Any, V : Any> : DataSource<K, V>() {
 
     private var fullyLoaded = false
 
-    override suspend fun find(key: K): V? {
+    override fun find(key: K): V? {
         cache[key]?.let { return it }
 
         val value = load(key) ?: return null
@@ -17,7 +17,7 @@ abstract class CachedDataSource<K : Any, V : Any> : DataSource<K, V>() {
         return value
     }
 
-    override suspend fun findAll(): Map<K, V> {
+    override fun findAll(): Map<K, V> {
         if (!fullyLoaded) {
             cache.clear()
             cache.putAll(loadAll())
@@ -27,19 +27,19 @@ abstract class CachedDataSource<K : Any, V : Any> : DataSource<K, V>() {
         return cache.toMap()
     }
 
-    override suspend fun save(key: K, value: V) {
+    override fun save(key: K, value: V) {
         saveInternal(key, value)
 
         cache[key] = value
     }
 
-    override suspend fun delete(key: K) {
+    override fun delete(key: K) {
         deleteInternal(key)
 
         cache.remove(key)
     }
 
-    suspend fun reload() {
+    fun reload() {
         cache.clear()
         cache.putAll(loadAll())
         fullyLoaded = true
